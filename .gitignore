@@ -1,0 +1,5 @@
+.vscode/
+.claude/
+.codex/
+.agents/
+docs/prompts
