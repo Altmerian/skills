@@ -1,7 +1,8 @@
 {
-  "name": "mattpocock-skills",
+  "name": "altmerian-skills",
   "skills": [
     "./skills/engineering/diagnose",
+    "./skills/engineering/document-codebase",
     "./skills/engineering/grill-with-docs",
     "./skills/engineering/triage",
     "./skills/engineering/improve-codebase-architecture",

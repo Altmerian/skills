@@ -1,38 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Links all skills in the repository to ~/.claude/skills, so that
-# they can be used by the local Claude CLI.
+# Links the shippable skills into this repo's own agent skill dirs
+# (.claude/skills and .agents/skills) so local agents discover them while
+# you develop. Skips deprecated/, personal/, and in-progress/ skills.
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-DEST="$HOME/.claude/skills"
+DESTS=(".claude/skills" ".agents/skills")
 
-# If ~/.claude/skills is a symlink that resolves into this repo, we'd end up
-# writing the per-skill symlinks back into the repo's own skills/ tree. Detect
-# and bail out instead of polluting the working copy.
-if [ -L "$DEST" ]; then
-  resolved="$(readlink -f "$DEST")"
-  case "$resolved" in
-    "$REPO"|"$REPO"/*)
-      echo "error: $DEST is a symlink into this repo ($resolved)." >&2
-      echo "Remove it (rm \"$DEST\") and re-run; the script will recreate it as a real dir." >&2
-      exit 1
-      ;;
-  esac
-fi
+# Start clean: wipe each dest dir so renamed/removed/now-excluded skills don't linger.
+# These dirs are gitignored and fully regenerated below.
+for dest in "${DESTS[@]}"; do
+  rm -rf "$REPO/$dest"
+  mkdir -p "$REPO/$dest"
+done
 
-mkdir -p "$DEST"
-
-find "$REPO/skills" -name SKILL.md -not -path '*/node_modules/*' -not -path '*/deprecated/*' -print0 |
+find "$REPO/skills" -name SKILL.md \
+  -not -path '*/node_modules/*' \
+  -not -path '*/deprecated/*' \
+  -not -path '*/personal/*' \
+  -not -path '*/in-progress/*' \
+  -print0 |
 while IFS= read -r -d '' skill_md; do
   src="$(dirname "$skill_md")"
   name="$(basename "$src")"
-  target="$DEST/$name"
+  rel_src="${src#"$REPO"/}"          # e.g. skills/engineering/tdd
 
-  if [ -e "$target" ] && [ ! -L "$target" ]; then
-    rm -rf "$target"
-  fi
+  for dest in "${DESTS[@]}"; do
+    target="$REPO/$dest/$name"
 
-  ln -sfn "$src" "$target"
-  echo "linked $name -> $src"
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+      rm -rf "$target"
+    fi
+
+    # dest dirs are two levels below the repo root, so ../../ reaches it.
+    ln -sfn "../../$rel_src" "$target"
+    echo "linked $dest/$name -> $rel_src"
+  done
 done

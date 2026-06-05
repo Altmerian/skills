@@ -17,7 +17,9 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 ## Domain awareness
 
-During codebase exploration, also look for existing documentation:
+During codebase exploration, also look for existing documentation.
+
+If `docs/codebase/` exists (the factual project map from the `/document-codebase` skill), skim the relevant files first — `STRUCTURE.md`, `ARCHITECTURE.md`, and others as relevant — to ground the glossary in how the code actually works. Suggest running the `/document-codebase` skill first if this is a brownfield project and the map is absent.
 
 ### File structure
 
