@@ -18,6 +18,7 @@ Single-context repo (most repos):
 ```
 /
 ├── CONTEXT.md
+├── docs/codebase/
 ├── docs/adr/
 │   ├── 0001-event-sourced-orders.md
 │   └── 0002-postgres-for-write-model.md
@@ -29,6 +30,7 @@ Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
 ```
 /
 ├── CONTEXT-MAP.md
+├── docs/codebase/                     ← system-wide codebase map
 ├── docs/adr/                          ← system-wide decisions
 └── src/
     ├── ordering/

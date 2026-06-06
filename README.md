@@ -2,6 +2,26 @@
 
 [![skills.sh](https://skills.sh/b/altmerian/skills)](https://skills.sh/altmerian/skills)
 
+My own additions are listed first; the original Matt's content follows below, unchanged.
+
+## My Skills
+
+Extra skill groups I've layered on top of the base pack, grouped by workflow.
+
+### Interview
+
+Fast, multi-stage coding-interview / timeboxed-task helpers (e.g. live coding). Lean, slash-only variants of the base engineering skills that trade depth for speed — clarify only the blockers, write a just-enough spec, then implement test-first. Support multiple interview stages. Run them per stage, in order: grill → spec → implement.
+
+- **[grill-with-docs-quick](./skills/interview/grill-with-docs-quick/SKILL.md)** — Blocking-only grilling: clarify just the questions that must be answered before coding the current stage, recording essential `CONTEXT.md` terms and hard-to-reverse ADRs inline.
+- **[to-task-spec](./skills/interview/to-task-spec/SKILL.md)** — Synthesise a lean `docs/task-spec.md` from the grilling conversation — no interview, no issue tracker.
+- **[tdd-task](./skills/interview/tdd-task/SKILL.md)** — Spec-driven red-green TDD of the current interview stage spec, building on prior still-green stages, with a compact Java concurrency recipe.
+
+### Codebase
+
+Map an unfamiliar or undocumented codebase before working in it.
+
+- **[document-codebase](./skills/engineering/document-codebase/SKILL.md)** — GSD skill `/gsd-map-codebase` simplified version. Explore a brownfield codebase with parallel agents and write a concise factual map under `docs/codebase/` (stack, integrations, architecture, structure, conventions, testing, concerns).
+
 ## Original Author's Content is Below
 
 My agent skills that I use every day to do real engineering - not vibe coding.
@@ -139,7 +159,6 @@ Software engineering fundamentals matter more than ever. These skills are my bes
 Skills I use daily for code work.
 
 - **[diagnose](./skills/engineering/diagnose/SKILL.md)** — Disciplined diagnosis loop for hard bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test.
-- **[document-codebase](./skills/engineering/document-codebase/SKILL.md)** — Explore a brownfield codebase with parallel agents and write a concise factual map under `docs/codebase/` (stack, integrations, architecture, structure, conventions, testing, concerns).
 - **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates `CONTEXT.md` and ADRs inline.
 - **[triage](./skills/engineering/triage/SKILL.md)** — Triage issues through a state machine of triage roles.
 - **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Find deepening opportunities in a codebase, informed by the domain language in `CONTEXT.md` and the decisions in `docs/adr/`.
