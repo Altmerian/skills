@@ -13,7 +13,8 @@ Spec-driven red-green implementation of one stage of a timeboxed coding task. Pl
 ## Philosophy (lean)
 
 - **Test observable behavior through the public interface, not implementation** — tests survive refactors, and a good test reads like a specification. See [tests.md](./tests.md).
-- **Vertical slices, not horizontal** — one test → minimal code to pass → repeat. Never write all the tests up front.
+- **Vertical slices, not horizontal** — drive one *behaviour* at a time → minimal code to pass → repeat. The slice unit is the behaviour, not a fixed test count. Never write tests for *later* behaviours up front; adding cases to the *current* one is fine.
+- **Minimal green is partial on purpose** — write the least code that turns *this* test green, even if it looks embarrassingly incomplete. The complete, clean solution is the destination across *all* slices, never slice 1's output. A capable model's instinct is to write the whole obvious solution behind one happy-path test — resist it: no validation, dedup, collision handling, or locking exists until a behaviour's failing test demands it.
 - **Minimal essential tests** — you can't test everything; implement every requirement, but only test the behaviours that carry real risk (happy-path tracer bullet, key edge cases, concurrency invariants).
 
 ## Fail fast
@@ -32,12 +33,13 @@ The **current** stage's **Requirements** are the full implementation scope — e
 
 ## Flow
 
-1. **Confirm** (one line): restate the current-stage test list and the intended public interface. Catches a spec mismatch before coding.
-2. **Tracer bullet → incremental loop:** for each behaviour, RED (write one failing test) → GREEN (minimal code to pass). One test at a time; don't anticipate future tests.
+1. **Confirm** (one line): restate the current-stage test list and the **Public surface** — the entry-point type(s), the construction/config shape (type + field names), and any domain value objects the tests name. Get a one-line OK *before* the first red test: this is where the names you'll present are agreed, not invented mid-test. If the spec has no Public surface field, propose one here and confirm it. Catches a spec mismatch before coding.
+2. **Tracer bullet → incremental loop:** for each `**Behaviours to test**`, RED → GREEN (minimal code to pass). The slice unit is one *behaviour*: write the fewest tests that specify and force it — usually one, a `@ParameterizedTest` for a family of equivalent inputs (see [tests.md](./tests.md)), or a triangulating second case that forces the real logic past a fake. Add cases only for the *current* behaviour; don't anticipate later ones. **Over-build self-check:** once green, scan your own diff — every branch, guard, loop, and field must trace to the current failing test or an already-green one. A production path that handles a behaviour with no failing test behind it was built ahead of the bar; delete it and let its own slice reintroduce it. Green alone doesn't complete a behaviour — it stays `- [ ]` until user approves it (step 4).
 3. **Refactor once green:** extract duplication, simplify. Never refactor while red. Re-run the **full** suite so earlier still-applicable behaviours stay green; drop or update tests a later stage has superseded.
-4. **Requirement audit:** before declaring the stage done, confirm every current-stage **Requirement** is actually satisfied — covered by a behaviour test or by straightforward code. A green suite is not proof of completeness; Behaviours to test is only a subset of Requirements.
+4. **One scenario at a time:** do the full tdd loop for one behaviour, then wait for explicit user approval. Only once approved, tick that behaviour `- [x]` in `docs/task-spec.md` and move on — the first unchecked behaviour is always the next slice, a durable marker so we never lose where we are across the back-and-forth. Don't write all the tests up front. User can flag some issues that will affect the next tests or implementation, so it's better to wait for feedback after each behaviour tdd slice.
+5. **Requirement audit:** before declaring the stage done, confirm every current-stage **Requirement** is actually satisfied — covered by a behaviour test or by straightforward code. A green suite is not proof of completeness; Behaviours to test is only a subset of Requirements.
 
-Keep each stage's solution **simple** — completing enough stages matters more than gold-plating one. Mock only at system boundaries; see [mocking.md](./mocking.md).
+Keep each stage's solution **simple** — completing enough stages matters more than gold-plating one. Introduce only the types the current behaviour forces: don't prematurely extract an interface, add a config field no test needs yet, or split helpers the spec didn't ask for (YAGNI). The agreed Public surface is fixed; internal structure stays emergent and minimal. The spec's **Key decisions** and algorithm details (hashing, collision strategy, locking, storage layout) describe the design that *emerges* across the full behaviour list — they are not a build order for slice 1; wire in each decision's machinery only when a behaviour's failing test requires it. Mock only at system boundaries; see [mocking.md](./mocking.md).
 
 ## Concurrency (when in scope)
 

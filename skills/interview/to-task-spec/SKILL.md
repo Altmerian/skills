@@ -27,10 +27,21 @@ Append a new `## Stage N` section to `docs/task-spec.md`, where `N` = the highes
 
 Use the template in [TASK-SPEC-FORMAT.md](./TASK-SPEC-FORMAT.md). Keep it JBGE: just enough to implement the stage and present it to the interviewer, no more. Drop the PRD's extensive user-story list and the Problem/Solution/Further-Notes prose.
 
+## Hand-off
+Before proceeding to `tdd-task`, confirm with the user that the spec is ready and we can start implementing. 
+User can ask to brainstorm some more aspects and decisions, re-iterate with the user and refine the spec one question at a time. Don't proceed to the `tdd-task` until the user explicitly confirms we are ready.
+Write all changes and updates in place to the spec during additional brainstorming.
+
 ### Requirements vs Behaviours to test
 
 - **Requirements** state the stage's functional scope — the acceptance criteria. Every requirement is implemented.
-- **Behaviours to test** is the prioritised, observable, interface-level test list that drives `tdd-task`: **one behaviour ≈ one test ≈ one red-green slice**, phrased as a `should…` specification (condition → observable outcome) at the public API. It is the critical subset — happy-path tracer bullet, key edge cases, concurrency invariants when relevant — not an exhaustive enumeration. Only behaviours that carry real risk get a bespoke test (remember: **minimal essential tests**).
+- **Behaviours to test** is the prioritised, observable, interface-level test list that drives `tdd-task`: **one behaviour ≈ one red-green slice** (one test, or a `@ParameterizedTest` covering a family of equivalent inputs), phrased as a `should…` specification (condition → observable outcome) at the public API. It is the critical subset — happy-path tracer bullet, key edge cases, concurrency invariants when relevant — not an exhaustive enumeration. Only behaviours that carry real risk get a bespoke test (remember: **minimal essential tests**). Write each as an unchecked checkbox (`- [ ]`) so `tdd-task` can tick it (`- [x]`) once the user approves that slice — a durable progress marker that survives the per-slice back-and-forth.
+
+### Public surface
+
+Record the **public surface** the tests will name so `tdd-task` confirms it instead of inventing it mid-test: the entry-point type(s) the caller constructs/calls, the construction/config shape (type name + field names), and any domain value objects that appear in test arrange/assert. The method signatures usually live in **Requirements**; this field pins how the service is *constructed and configured*, which is just as public yet easy to leave implicit.
+
+Keep it JBGE and draw the line firmly: only the public API the caller touches goes here. Internal classes, private helpers, and whether to extract an interface stay **TDD-emergent** in `tdd-task` — pinning them here would over-specify and kill the red-green design discovery. Omit the field when the stage reuses the prior stage's surface unchanged.
 
 ### Concurrency
 

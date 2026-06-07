@@ -23,23 +23,23 @@ Start **every invocation** by producing a tiny interviewer-facing clarification 
 
 The script is the only multi-question bundle in this skill. Format it as a numbered list the user can pass to the interviewer, then ask the user to return the clarifications/answers with the same numbers so you can map each answer to the original assumption. Keep it short enough to say aloud in a few minutes:
 
-- **Public interface / delivery shape** — e.g. service API vs HTTP endpoint vs CLI, project skeleton and test framework constraints.
+- **Public interface / delivery shape** — e.g. service API vs HTTP endpoint vs CLI, project skeleton and test framework constraints, and how the service is constructed/configured (not just the operation signatures).
 - **Core functional contract** — the minimal happy path, required validation, and how failures are represented.
 - **State, persistence, and concurrency assumptions** — in-memory vs persistent, single process vs distributed, and whether shared mutable state must be thread-safe.
 
-Use assumption-first phrasing: propose the simplest Stage 1 contract and ask the interviewer to correct it. Example for `build a URL shortener`:
+Use assumption-first then question phrasing: propose the simplest Stage 1 contract and ask the interviewer if it is correct or we need additional details. Example for `build a URL shortener`:
 
 ```md
 Please confirm or correct these assumptions before I start:
 
 1. Public interface / delivery shape:
-   I'll assume Stage 1 is a small Java service API covered by unit tests, not HTTP or CLI.
+   I'll assume Stage 1 is a small Java service API covered by unit tests, not HTTP or CLI. Is it correct?
 
 2. Core functional contract:
-   I'll assume the service shortens a valid long URL into an opaque unique code and resolves that code back to the original URL. No custom aliases, expiry, analytics, or deterministic reuse unless you want those in scope.
+   I'll assume the service shortens a valid long URL into an opaque unique code and resolves that code back to the original URL. Do we need custom aliases, expiry, or deterministic reuse in the scope?
 
 3. State, persistence, and concurrency:
-   I'll assume in-memory storage in a single process. If the service can be called concurrently, I'll make shared state thread-safe, but I won't add database or distributed guarantees.
+   I'll assume in-memory storage in a single process. If the service can be called concurrently, I'll make shared state thread-safe. Do we need a database or distributed guarantees?
 ```
 
 Do **not** write `CONTEXT.md` terms or ADRs from the script. The user's numbered answers stay in the same conversation context and feed the following grilling loop. If some assumptions are not answered by the user in the following response (e.g. they only clarify #1 and #3), take the rest as valid initial assumptions and proceed to the next step.
@@ -50,11 +50,13 @@ After the clarification script is answered, proceed with the next step: ask the 
 - the public interfaces, or
 - the scope of the stage.
 
- ask any remaining blockers **one question at a time**, with your recommended answer, and wait for the reply before the next. If a question can be answered by reading the existing code or `docs/codebase/`, read it instead of asking.
+Ask any remaining blockers **one question at a time**, with your recommended answer, and wait for the reply before the next. If a question can be answered by reading the existing code or `docs/codebase/`, read it instead of asking.
 
-Stop the moment no blocker remains. **Target 2–3 blocking questions per stage** (a few minutes of clarification); soft backstop ~4 — then pause and propose proceeding to `to-task-spec`.
+Stop the moment no blocker remains. **Target 3–5 blocking questions per stage** (a few minutes of clarification); soft backstop ~5 — then pause and propose proceeding to `to-task-spec` or continue brainstorming.
 
 **Drop**: edge-case scenario stress-testing, exhaustive glossary sharpening, relentless depth.
+
+Do not proceed to `to-task-spec` until user explicitly confirms we are ready.
 
 ## Concurrency is blocking
 
