@@ -10,9 +10,9 @@ Extra skill groups I've layered on top of the base pack, grouped by workflow.
 
 ### Interview
 
-Fast, multi-stage coding-interview / timeboxed-task helpers (e.g. live coding). Lean, slash-only variants of the base engineering skills that trade depth for speed — clarify only the blockers, write a just-enough spec, then implement test-first. Support multiple interview stages. Run them per stage, in order: grill → spec → implement.
+Fast, multi-stage Java coding-interview / timeboxed-task helpers (e.g. live coding). Lean, slash-only variants of the base engineering skills that trade depth for speed — clarify assumptions and blockers, write a just-enough spec, then implement test-first. Support multiple interview stages. Run them per stage, in order: grill → spec → implement. Some Java specifics exist, but the general approach is language-agnostic.
 
-- **[grill-with-docs-quick](./skills/interview/grill-with-docs-quick/SKILL.md)** — Blocking-only grilling: clarify just the questions that must be answered before coding the current stage, recording essential `CONTEXT.md` terms and hard-to-reverse ADRs inline.
+- **[grill-with-docs-quick](./skills/interview/grill-with-docs-quick/SKILL.md)** — Starts with an interviewer-facing clarification script, then asks only remaining blockers before coding the current stage, recording essential `CONTEXT.md` terms and hard-to-reverse ADRs inline.
 - **[to-task-spec](./skills/interview/to-task-spec/SKILL.md)** — Synthesise a lean `docs/task-spec.md` from the grilling conversation — no interview, no issue tracker.
 - **[tdd-task](./skills/interview/tdd-task/SKILL.md)** — Spec-driven red-green TDD of the current interview stage spec, building on prior still-green stages, with a compact Java concurrency recipe.
 
