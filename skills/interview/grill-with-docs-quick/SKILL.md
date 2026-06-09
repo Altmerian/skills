@@ -72,7 +72,7 @@ A concurrency strategy that is hard to reverse is a candidate for an ADR.
 
 Record only what changes the next step — otherwise leave it in the conversation for `to-task-spec` to capture.
 
-- **CONTEXT.md** — glossary at the repo root, updated **in place**. Add a term only when it is essential and would change a test name or interface. It is a glossary only: no implementation details, not a spec. Format: [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+- **CONTEXT.md** — glossary, updated **in place**. Add a term only when it is essential and would change a test name or interface. It is a glossary only: no implementation details, not a spec. Format: [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 - **ADRs** — `docs/adr/NNNN-*.md`, **append-only**. Offer one only when a decision is **both blocking and hard-to-reverse**. When a later stage reverses an earlier decision, mark the old ADR superseded via its status rather than deleting it. Format: [ADR-FORMAT.md](./ADR-FORMAT.md).
 
 Create both lazily — only when you have the first thing to write. They start absent for both blank and non-blank projects.
