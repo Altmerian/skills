@@ -50,7 +50,7 @@ After the clarification script is answered, proceed with the next step: ask the 
 - the public interfaces, or
 - the scope of the stage.
 
-Ask any remaining blockers **one question at a time**, with your recommended answer, and wait for the reply before the next. If a question can be answered by reading the existing code or `docs/codebase/`, read it instead of asking.
+Ask any remaining blockers **one question at a time**, with your recommended answer, and wait for the reply before the next. If a question can be answered by reading the existing code or `docs/codebase/`, read it instead of asking. From Stage 2 on, refer to existing requirements in `docs/task-spec.md` by their **FR ids** (FR1, FR2, …) when asking what changes or stays in force, so answers map cleanly onto the spec.
 
 Stop the moment no blocker remains. **Target 3–5 blocking questions per stage** (a few minutes of clarification); soft backstop ~5 — then pause and propose proceeding to `to-task-spec` or continue brainstorming.
 

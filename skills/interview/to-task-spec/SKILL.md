@@ -23,7 +23,7 @@ The skill is a part of the coding-interview / timeboxed-task pipeline that can s
 If you cannot assemble the current stage's requirements and acceptance criteria from the conversation or the artifacts, **ask for them** — do not fabricate a spec.
 
 ## Write
-Append a new `## Stage N` section to `docs/task-spec.md`, where `N` = the highest existing stage number + 1 (or 1 if the file is absent), and mark the prior stage as completed. If the user says this run is a **revision** of the current stage, update the latest section in place instead.
+Append a new `## Stage N` section to `docs/task-spec.md`, where `N` = the highest existing stage number + 1 (or 1 if the file is absent), and mark the prior stage as completed. If the user says this run is a **revision** of the current stage, update the latest section in place instead — keeping existing FR ids stable and appending new requirements with the next free id.
 
 Use the template in [TASK-SPEC-FORMAT.md](./TASK-SPEC-FORMAT.md). Keep it JBGE: just enough to implement the stage and present it to the interviewer, no more. Drop the PRD's extensive user-story list and the Problem/Solution/Further-Notes prose.
 
@@ -34,8 +34,8 @@ Write all changes and updates in place to the spec during additional brainstormi
 
 ### Requirements vs Behaviours to test
 
-- **Requirements** state the stage's functional scope — the acceptance criteria. Every requirement is implemented.
-- **Behaviours to test** is the prioritised, observable, interface-level test list that drives `tdd-task`: **one behaviour ≈ one red-green slice** (one test, or a `@ParameterizedTest` covering a family of equivalent inputs), phrased as a `should…` specification (condition → observable outcome) at the public API. It is the critical subset — happy-path tracer bullet, key edge cases, concurrency invariants when relevant — not an exhaustive enumeration. Only behaviours that carry real risk get a bespoke test (remember: **minimal essential tests**). Write each as an unchecked checkbox (`- [ ]`) so `tdd-task` can tick it (`- [x]`) once the user approves that slice — a durable progress marker that survives the per-slice back-and-forth.
+- **Requirements** state the stage's functional scope — the acceptance criteria. Every requirement is implemented. Index each as **FR{n}**, numbered globally across the whole spec (continue from the highest existing FR in any prior stage). Ids are stable handles for documents and conversation: never renumber or reuse one — when a revision drops or reworks a requirement, supersede it instead.
+- **Behaviours to test** is the prioritised, observable, interface-level test list that drives `tdd-task`: **one behaviour ≈ one red-green slice** (one test, or a `@ParameterizedTest` covering a family of equivalent inputs), phrased as a `should…` specification (condition → observable outcome) at the public API. It is the critical subset — happy-path tracer bullet, key edge cases, concurrency invariants when relevant — not an exhaustive enumeration. Only behaviours that carry real risk get a bespoke test (remember: **minimal essential tests**). Write each as an unchecked checkbox (`- [ ]`) ending with the FR id(s) it verifies — e.g. `- [ ] should reject an overdraft transfer (FR4)` — so `tdd-task` can tick it (`- [x]`) once the user approves that slice and the requirement audit can walk FR by FR. A durable progress marker that survives the per-slice back-and-forth.
 
 ### Public surface
 
@@ -49,7 +49,7 @@ When shared mutable state is in scope, record the concurrency requirement (expec
 
 ### Supersession
 
-When a later stage changes an earlier stage's assumption, fill the **Supersedes** field so the active scope is unambiguous — e.g. "Stage 1 assumed single-threaded; this stage now requires concurrent access".
+When a later stage changes an earlier stage's assumption, fill the **Supersedes** field naming the affected FR ids so the active scope is unambiguous — e.g. "FR4 (Stage 1, single-threaded): this stage now requires concurrent access". The superseded FR keeps its id and stays in its stage for history.
 Mark a previous stage superseded when its requirements are no longer in force, but keep it in the spec for historical context.
 
 Don't commit — leave the file for review and hand off to `/tdd-task`.
